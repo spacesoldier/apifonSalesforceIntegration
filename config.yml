@@ -1,0 +1,33 @@
+app-name: "Salesforce to Apifon messaging service"
+
+# this section describes the server logic provided by the application
+# it consists of server and its endpoints definitions
+servers:
+  # a name of the server inside the application
+  my-http-server:
+    hosts:
+      - "127.0.0.1"
+    port: 8080
+    protocol: "http"
+    endpoints:
+
+      # this endpoint demonstrates the usage of an external resource
+      messaging:
+        location: "/message"
+        methods:
+          post:
+            handler: "receiveSalesForceEvent"
+
+# this section describes the usage of external resources
+# by defining the endpoints to call and how to handle the results
+clients:
+  external-api:
+    type: "web"
+    url: "https://www.google.com/"
+    #port: 80
+    methods:
+      post:
+        input: "apifonMessageRequest"
+        success: "onApifonSendResult"
+        fail: "onApifonSendError"
+
