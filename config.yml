@@ -11,7 +11,7 @@ servers:
     protocol: "http"
     endpoints:
 
-      # this endpoint demonstrates the usage of an external resource
+      # this endpoint receives the messaging requests from Salesforce
       messaging:
         location: "/message"
         methods:
@@ -21,7 +21,7 @@ servers:
 # this section describes the usage of external resources
 # by defining the endpoints to call and how to handle the results
 clients:
-  external-api:
+  apifon:
     type: "web"
     url: "https://www.google.com/"
     #port: 80
