@@ -19,35 +19,32 @@ function receiveSalesForceEvent(msg){
 
     let parsedMessage;
 
-    if (validateSfEvent(salesForceMsgStr)){
-        try{
-            parsedMessage = JSON.parse(salesForceMsgStr);
-        } catch (ex){
-            msg.payload = ex;
-        }
-
-        let eventParams;
-        let msgTemplate;
-        if (parsedMessage != undefined){
-            eventParams = extractTemplateParams(parsedMessage);
-            msgTemplate = extractMessageTemplate(parsedMessage);
-        }
-
-        if (eventParams != undefined && msgTemplate !== undefined){
-            let messageToSend = msgTemplate;
-            for (let paramName in eventParams){
-                if (messageToSend.includes(`%${paramName}%`)){
-                    messageToSend = messageToSend.replaceAll(`%${paramName}%`,eventParams[paramName]);
-                }
-            }
-            log.info(`message to Apifon: ${messageToSend}`);
-            msg.payload = messageToSend;
-        }
-
-    } else {
-        msg.payload = `invalid input message: ${JSON.stringify(validateSfEvent.errors)}`;
+    try{
+        parsedMessage = JSON.parse(salesForceMsgStr);
+    } catch (ex){
+        msg.payload = ex;
     }
 
+    if (parsedMessage != undefined){
+        if (validateSfEvent(parsedMessage)){
+
+            let eventParams = extractTemplateParams(parsedMessage);
+            let msgTemplate = extractMessageTemplate(parsedMessage);
+
+            if (eventParams != undefined && msgTemplate !== undefined){
+                let messageToSend = msgTemplate;
+                for (let paramName in eventParams){
+                    if (messageToSend.includes(`%${paramName}%`)){
+                        messageToSend = messageToSend.replaceAll(`%${paramName}%`,eventParams[paramName]);
+                    }
+                }
+                log.info(`message to Apifon: ${messageToSend}`);
+                msg.payload = messageToSend;
+            }
+        } else {
+            msg.payload = "not enough data to send a message to Apifon";
+        }
+    }
 
     return msg;
 }

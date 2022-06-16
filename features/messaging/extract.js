@@ -2,24 +2,11 @@
 
 const eventDataMarker = 'com.infobip.event.data.';
 
-function extractArgsFromSfMessage(sfMessage){
-
-    let result;
-
-    let {msg} = sfMessage;
-
-    if (msg !== undefined){
-        let {inArguments} = msg;
-        result = inArguments;
-    }
-
-    return result;
-}
 
 function extractTemplateParams(sfMessage){
     let extractedParams = {};
 
-    let inArguments = extractArgsFromSfMessage(sfMessage);
+    let {inArguments} = sfMessage;
     if (inArguments != undefined){
         for (let element of inArguments){
             for (let key in element){
@@ -39,9 +26,9 @@ const msgTemplateFieldName = 'messageTemplate';
 
 function extractMessageTemplate(sfMessage){
     let msgTemplate;
-    let inArgs = extractArgsFromSfMessage(sfMessage);
-    if (inArgs !== undefined){
-        for (let element of inArgs){
+    let {inArguments} = sfMessage;
+    if (inArguments !== undefined){
+        for (let element of inArguments){
             for (let key in element){
                 if (key.includes(msgTemplateFieldName)){
                     msgTemplate = element[key];

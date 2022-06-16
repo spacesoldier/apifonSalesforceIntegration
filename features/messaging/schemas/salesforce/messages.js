@@ -1,13 +1,13 @@
 'use strict'
 
 const salesForceEvent = {
-    type: "string",
+    type: "object",
     properties: {
-        msg: {type: "string"},
-        dttm: {type: "string"}
+        inArguments: {type: "array"},
+        outArguments: {type: "array"}
     },
-    required: ["msg", "dttm"],
-    additionalProperties: false
+    required: ["inArguments", "outArguments"],
+    additionalProperties: true
 }
 
 module.exports = {

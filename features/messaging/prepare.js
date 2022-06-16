@@ -1,30 +1,43 @@
 'use strict'
 
-const findOpenCurlBrace = /{(?![\s]+)/g;
-const findCloseCurlBrace = /(?<!")}/g;
-const findEqChar = /(?!.*[[])=/g;
-const findAllFormatting = /([\s]+)/g;
-const findCommaBeforeChar = /,(?=\w)/g;
-const findCommaAfterChar = /(?<=\w),/g;
-const findColon = /(?<=\w):(?=\W)/g;
-const findLastCurlBrace = /{(?=\w)/g;
-const findUnfinishedStr = /(?<=:")}/g;
+const findFormatting = [
+    /\s*(?=[{[])/g,
+    /(?<=[{[])\s+/g,
+    /(?<=[}])\s+/g,
+    /\s+(?=\w+":")/g,
+    /\s+(?="\w+)/g,
+    /(?<=],)\s+/g,
+    /\s+(?=})/g,
+    /(?<=,)\s+(?=\w+=)/g
+];
+
+const findOpenCurlBrace = /{(?=\w+)/g;
+const findCloseCurlBrace = [
+    /(?<=[^\x00-\x7F])}/g,
+    /(?<=\w)}/g
+];
+
+const findEqCharInKVPairs = [
+    /=(?=\w+")/g,
+    /=(?=[^\x00-\x7F])/g,
+    /(?<=[\w+])=(?=[\w+])/g,
+];
+
+const findEqCharBeforeStructs = /=(?=[[{])/g;
+const findCommaBeforeKey = /(?<![]|}]),(?=\w+":")/g;
+const findCommaBeforeStructF = /(?<=[]|}]),(?=\w+":)/g;
+const findEmptyValEq = /=(?=})/g;
 
 const replacements = [
-    {   find: '{},',                replaceWith: ''     },
-    {   find: '"{',                 replaceWith: '{'    },
-    {   find: '}"',                 replaceWith: '}'    },
-    {   find: findOpenCurlBrace,    replaceWith: '{"'   },
-    {   find: findEqChar,           replaceWith: '"="'  },
-    {   find: '"="',                replaceWith: '":"'  },
-    {   find: '=',                  replaceWith: ':'    },
-    {   find: findAllFormatting,    replaceWith: ''     },
-    {   find: findCloseCurlBrace,   replaceWith: '"}'   },
-    {   find: findCommaBeforeChar,  replaceWith: ',"'   },
-    {   find: findCommaAfterChar,   replaceWith: '",'   },
-    {   find: findColon,            replaceWith: '":'   },
-    {   find: findLastCurlBrace,    replaceWith: '{"'   },
-    {   find: findUnfinishedStr,    replaceWith: '"}'   }
+    {   find: findFormatting,           replaceWith: ''     },
+    {   find: '{},',                    replaceWith: ''     },
+    {   find: findOpenCurlBrace,        replaceWith: '{"'   },
+    {   find: findCloseCurlBrace,       replaceWith: '"}'   },
+    {   find: findEqCharInKVPairs,      replaceWith: '":"'  },
+    {   find: findEqCharBeforeStructs,  replaceWith: '":'   },
+    {   find: findCommaBeforeKey,       replaceWith: '","'  },
+    {   find: findCommaBeforeStructF,   replaceWith: ',"'   },
+    {   find: findEmptyValEq,           replaceWith: '":""' },
 ];
 
 /**
@@ -34,9 +47,15 @@ const replacements = [
  */
 function transformToValidJSON(message){
 
-
     for (let replacement of replacements){
-        message = message.replaceAll(replacement.find, replacement.replaceWith);
+        if (replacement.find instanceof Array){
+            for (let toReplace of replacement.find){
+                message = message.replaceAll(toReplace, replacement.replaceWith);
+            }
+        } else {
+            message = message.replaceAll(replacement.find, replacement.replaceWith);
+        }
+
     }
 
     return message;
