@@ -5,46 +5,36 @@ const log = loggerBuilder()
                         .level(logLevels.INFO)
                     .build();
 
-const {validateSfEvent} = require('./schemas');
-const {transformToValidJSON} = require('./prepare');
-const {extractTemplateParams, extractMessageTemplate} = require('./extract');
+const {validateSfEvent} = require('./validate');
+const {parseSalesforceMessage,extractMessageDetails} = require('./messages/salesforce/');
 
 function receiveSalesForceEvent(msg){
 
-    let salesForceMsgStr = msg.payload;
+    let {error,parsedMessage} = parseSalesforceMessage(msg);
+    if (error !== undefined){
+        msg.payload = `cannot send a message to Apifon due to an error: ${error}`;
+    } else {
+        if (parsedMessage !== undefined){
+            if (validateSfEvent(parsedMessage)){
 
-    let startTs = Date.now();
-    salesForceMsgStr = transformToValidJSON(salesForceMsgStr);
-    log.info(`transformation took ${Date.now() - startTs} ms`);
+                let {templateParams, template} = extractMessageDetails(parsedMessage);
 
-    let parsedMessage;
-
-    try{
-        parsedMessage = JSON.parse(salesForceMsgStr);
-    } catch (ex){
-        msg.payload = ex;
-    }
-
-    if (parsedMessage != undefined){
-        if (validateSfEvent(parsedMessage)){
-
-            let eventParams = extractTemplateParams(parsedMessage);
-            let msgTemplate = extractMessageTemplate(parsedMessage);
-
-            if (eventParams != undefined && msgTemplate !== undefined){
-                let messageToSend = msgTemplate;
-                for (let paramName in eventParams){
-                    if (messageToSend.includes(`%${paramName}%`)){
-                        messageToSend = messageToSend.replaceAll(`%${paramName}%`,eventParams[paramName]);
+                if (templateParams !== undefined && template !== undefined){
+                    let messageToSend = template;
+                    for (let paramName in templateParams){
+                        if (messageToSend.includes(`%${paramName}%`)){
+                            messageToSend = messageToSend.replaceAll(`%${paramName}%`,templateParams[paramName]);
+                        }
                     }
+                    log.info(`message to Apifon: ${messageToSend}`);
+                    msg.payload = messageToSend;
                 }
-                log.info(`message to Apifon: ${messageToSend}`);
-                msg.payload = messageToSend;
+            } else {
+                msg.payload = "not enough data to send a message to Apifon";
             }
-        } else {
-            msg.payload = "not enough data to send a message to Apifon";
         }
     }
+
 
     return msg;
 }

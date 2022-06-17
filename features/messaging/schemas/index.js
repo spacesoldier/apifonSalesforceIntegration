@@ -1,6 +1,6 @@
 'use strict'
 
-const {validateSfEvent} = require('./validate');
+const {validateSfEvent} = require('../validate');
 
 module.exports = {
     validateSfEvent

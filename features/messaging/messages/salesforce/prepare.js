@@ -61,6 +61,24 @@ function transformToValidJSON(message){
     return message;
 }
 
+function parseSalesforceMessage(msg){
+    let salesForceMsgStr = transformToValidJSON(msg.payload);
+
+    let salesforceMessage;
+
+    try{
+        salesforceMessage = JSON.parse(salesForceMsgStr);
+    } catch (ex){
+        return {
+            error: ex
+        }
+    }
+
+    return {
+        parsedMessage: salesforceMessage
+    }
+}
+
 module.exports = {
-    transformToValidJSON
+    parseSalesforceMessage
 }
