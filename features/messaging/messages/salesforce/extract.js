@@ -49,6 +49,39 @@ function extractMessageDetails (sfMessage) {
     }
 }
 
+function extractApifonParameters (sfMessage){
+    let paramNames = [
+        'apiKey',
+        'clientSecret',
+        'phone',
+        'imageUrl',
+        'buttonUrl',
+        'buttonText'
+    ];
+    let {inArguments} = sfMessage;
+
+    let apifonParams = {};
+
+    if (inArguments !== undefined){
+
+        // let's convert an array of objects with single property
+        // to an object which contain all these properties
+        // and filter only those properties which are defined in the list above
+        for (let property of inArguments){
+            for (let key in property){
+                if (paramNames.some(param => param === key)){
+                    apifonParams[key] = property[key];
+                }
+            }
+        }
+    }
+
+    return {
+        ...(apifonParams)
+    };
+}
+
 module.exports = {
-    extractMessageDetails
+    extractMessageDetails,
+    extractApifonParameters
 }

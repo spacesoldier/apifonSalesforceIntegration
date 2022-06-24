@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spacesoldier/messageBridgeServicePrototype.git"
+    "url": "git+https://github.com/spacesoldier/apifonSalesforceIntegration.git"
   },
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/spacesoldier/messageBridgeServicePrototype/issues"
+    "url": "https://github.com/spacesoldier/apifonSalesforceIntegration/issues"
   },
-  "homepage": "https://github.com/spacesoldier/messageBridgeServicePrototype#readme",
+  "homepage": "https://github.com/spacesoldier/apifonSalesforceIntegration#readme",
   "dependencies": {
     "ajv": "^8.11.0",
-    "starty": "^0.1.1"
+    "starty": "^0.1.3"
   }
 }

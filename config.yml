@@ -23,8 +23,8 @@ servers:
 clients:
   apifon:
     type: "web"
-    url: "https://www.google.com/"
-    #port: 80
+    url: "http://localhost/services/api/v1/im/"
+    port: 8080
     methods:
       post:
         input: "apifonMessageRequest"

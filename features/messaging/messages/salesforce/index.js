@@ -1,8 +1,10 @@
 'use strict'
 const {parseSalesforceMessage} = require('./prepare');
-const {extractMessageDetails} = require('./extract');
+const {extractMessageDetails, extractApifonParameters} = require('./extract');
+
 
 module.exports = {
     parseSalesforceMessage,
-    extractMessageDetails
+    extractMessageDetails,
+    extractApifonParameters
 }
