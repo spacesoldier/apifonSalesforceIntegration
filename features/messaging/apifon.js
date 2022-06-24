@@ -75,6 +75,7 @@ function receiveSalesForceEvent(msg){
                     if (headers !== undefined && body !== undefined){
                         msg.request.headers = headers;
                         msg.apifonMessageRequest = body;
+                        delete msg.payload;
                     } else {
                         msg.response.statusCode = 400;
                         msg.payload = "not enough data to send a message to Apifon, could not set headers of prepare message body";

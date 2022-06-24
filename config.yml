@@ -18,12 +18,19 @@ servers:
           post:
             handler: "receiveSalesForceEvent"
 
+      # this stub represents the imitation of an Apifon instant messaging service
+      stub:
+        location: "/services/api/v1/im"
+        methods:
+          post:
+            handler: "apifonIMRequestStub"
+
 # this section describes the usage of external resources
 # by defining the endpoints to call and how to handle the results
 clients:
   apifon:
     type: "web"
-    url: "http://localhost/services/api/v1/im/"
+    url:  "http://localhost/services/api/v1/im/"
     port: 8080
     methods:
       post:
