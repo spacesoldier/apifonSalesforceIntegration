@@ -2,7 +2,7 @@
   "name": "service-experiment",
   "version": "1.0.0",
   "description": "an example project using Starty framework for the demonstration purpose",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
