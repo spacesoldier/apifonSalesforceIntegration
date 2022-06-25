@@ -6,7 +6,8 @@ servers:
   # a name of the server inside the application
   my-http-server:
     hosts:
-      - "127.0.0.1"
+      - "0.0.0.0"
+#      - "127.0.0.1"
     port: 8080
     protocol: "http"
     endpoints:
