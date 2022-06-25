@@ -32,8 +32,6 @@ function prepareResponse(receivedText){
                                             }
                                         }
                                             }
-                                        }
-                                      }
                                     ]
                                   },
                                   "result_info": {

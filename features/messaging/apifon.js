@@ -94,13 +94,51 @@ function receiveSalesForceEvent(msg){
     return msg;
 }
 
+//      "message_id":"String",
+//      "send_dttm":"Date",
+//      "status":"Number",
+//      "contact_phone":"String",
+//      "message_text":"String"
+
 function onApifonSendResult(msg){
+    let apifonResp;
+    try {
+        apifonResp = JSON.parse(msg.payload);
+    } catch (ex){
+        msg.statusCode = 500;
+        msg.payload = ex;
+    }
+
+
+    let apiResults = [];
+    if (apifonResp !== undefined){
+        let {results, result_info} = apifonResp;
+        if (results !== undefined){
+            for (let key in results){
+                apiResults.push({
+                    contact: key,
+                    ...(results[key]),
+                    ...(result_info)
+                });
+            }
+
+        }
+    }
+
+    if (apiResults !== undefined){
+        msg.payload = {
+            message_id: apiResults[0][0].message_id,
+            contact_phone: apiResults[0].contact,
+            status: apiResults[0].status_code,
+        }
+    }
 
     return msg;
 }
 
 function onApifonSendError(msg){
-
+    msg.response.statusCode = 500;
+    return msg;
 }
 
 
