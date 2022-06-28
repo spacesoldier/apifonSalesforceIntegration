@@ -6,9 +6,8 @@ servers:
   # a name of the server inside the application
   my-http-server:
     hosts:
-      - "0.0.0.0"
-#      - "127.0.0.1"
-    port: 8080
+      - ${ACCEPT_HOST:"127.0.0.1"}
+    port: ${PORT:8080}
     protocol: "http"
     endpoints:
 
@@ -32,7 +31,7 @@ clients:
   apifon:
     type: "web"
     url:  "http://localhost/services/api/v1/im/"
-    port: 8080
+    port: ${PORT:8080}
     methods:
       post:
         input: "apifonMessageRequest"
