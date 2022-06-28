@@ -1,5 +1,5 @@
 'use strict'
-const {loggerBuilder, logLevels} = require('../../starty');
+const {loggerBuilder, logLevels} = require('starty');
 const log = loggerBuilder()
                         .name('message service')
                         .level(logLevels.INFO)
