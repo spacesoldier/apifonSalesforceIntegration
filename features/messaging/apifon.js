@@ -164,6 +164,7 @@ function onApifonSendResult(msg){
 
 function onApifonSendError(msg){
     msg.response.statusCode = 500;
+    log.info(`error from Apifon: ${msg.payload}`);
     return msg;
 }
 
