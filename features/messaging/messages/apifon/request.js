@@ -44,9 +44,9 @@ function prepareSimpleIMRequest(messageText, apifonParams){
 
     if (apiKey !== undefined && clientSecret !== undefined && phone !== undefined){
         let simpleIMRequest = simpleIMRequestBodyBuilder()
-            .subscriber(phone)
-            .text(messageText)
-            .build();
+                                                            .subscriber(phone)
+                                                            .text(messageText)
+                                                .build();
         body = JSON.stringify(simpleIMRequest);
 
         headers = prepareIMRequestHeaders(body, apiKey,clientSecret);

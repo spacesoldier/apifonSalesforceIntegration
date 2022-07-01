@@ -26,6 +26,14 @@ function fillMessageTemplate(messageTemplate, templateParams) {
     return messageToSend;
 }
 
+const apifonMessageCache = {};
+
+function cacheMessage(msg, messageToSend, sendDateTime) {
+    apifonMessageCache[msg.msgId] = {
+        text: messageToSend ?? 'no text',
+        send_dttm: sendDateTime ?? new Date().toUTCString()
+    };
+}
 
 /**
  *
@@ -75,6 +83,7 @@ function receiveSalesForceEvent(msg){
                     if (headers !== undefined && body !== undefined){
                         msg.request.headers = headers;
                         msg.apifonMessageRequest = body;
+                        cacheMessage(msg, messageToSend, headers['X-ApifonWS-Date']);
                         delete msg.payload;
                     } else {
                         msg.response.statusCode = 400;
@@ -125,13 +134,26 @@ function onApifonSendResult(msg){
         }
     }
 
+    let msgFromCache = apifonMessageCache[msg.msgId];
+
+    let personalMessage;
+    let sendDttm;
+    if (msgFromCache !== undefined){
+        personalMessage = msgFromCache.text;
+        sendDttm = msgFromCache.send_dttm;
+    }
+
     if (apiResults !== undefined){
         msg.payload = {
             message_id: apiResults[0][0].message_id,
             contact_phone: apiResults[0].contact,
             status: apiResults[0].status_code,
+            message_text: personalMessage ?? '',
+            send_dttm: sendDttm ?? new Date().toUTCString()
         }
     }
+
+    delete apifonMessageCache[msg.msgId];
 
     msg.response.headers = {};
     msg.response.headers['content-type'] = 'application/json';
