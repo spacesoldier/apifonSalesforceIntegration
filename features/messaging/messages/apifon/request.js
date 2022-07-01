@@ -4,13 +4,13 @@ const {simpleIMRequestBodyBuilder} = require('./messages');
 
 const crypto = require('crypto');
 
-const apiEndpoint = '/services/api/v1/im/';
+const apiEndpoint = '/services/api/v1/im/send';
 const url = `https://ars.apifon.com${apiEndpoint}`;
 
 function prepareIMRequestHeaders(requestBody, apiKey, clientSecret){
     let requestDate = new Date().toUTCString();
     let message = "POST" + "\n"
-                         + apiKey + "\n"
+                         + apiEndpoint + "\n"
                          + requestBody + "\n"
                          + requestDate;
 
