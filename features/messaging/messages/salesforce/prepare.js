@@ -61,17 +61,15 @@ function transformToValidJSON(message){
     return message;
 }
 
-function parseSalesforceMessage(msg){
-    let salesForceMsgStr = transformToValidJSON(msg.payload);
+function parseSalesforceMessage(rawSfMessage){
 
     let salesforceMessage;
 
     try{
-        salesforceMessage = JSON.parse(salesForceMsgStr);
+        salesforceMessage = JSON.parse(rawSfMessage);
     } catch (ex){
-        return {
-            error: ex
-        }
+        let salesForceMsgStr = transformToValidJSON(rawSfMessage);
+        salesforceMessage = JSON.parse(salesForceMsgStr);
     }
 
     return {

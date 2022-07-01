@@ -52,7 +52,7 @@ function cacheMessage(msg, messageToSend, sendDateTime) {
  */
 function receiveSalesForceEvent(msg){
 
-    let {error,parsedMessage} = parseSalesforceMessage(msg);
+    let {error,parsedMessage} = parseSalesforceMessage(msg.payload);
     if (error !== undefined){
         msg.payload = `cannot send a message to Apifon due to an error: ${error}`;
     } else {
