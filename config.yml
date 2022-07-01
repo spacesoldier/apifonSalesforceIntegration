@@ -31,7 +31,7 @@ clients:
   apifon:
     type: "web"
     url:  ${EXT_SERVICE_URL:"http://localhost/services/api/v1/im/"}
-    port: ${PORT:8080} #${EXT_SERVICE_PORT:8080}
+    port: ${EXT_PORT:8080} #${EXT_SERVICE_PORT:8080}
     methods:
       post:
         input: "apifonMessageRequest"
