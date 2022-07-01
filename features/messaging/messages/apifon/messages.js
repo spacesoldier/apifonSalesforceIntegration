@@ -111,7 +111,7 @@ function simpleIMRequestBodyBuilder(){
      */
     function text(textStr){
         imChannels.push({
-            sender_id: 'Apifon',
+            sender_id: 'Apifon Chat',
             text: textStr
         })
         return this;
