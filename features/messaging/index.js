@@ -3,11 +3,13 @@
 const {
     receiveSalesForceEvent,
     onApifonSendResult,
-    onApifonSendError
+    onApifonSendError,
+    prepareMessagingReport
 } = require('./apifon');
 
 module.exports = {
     receiveSalesForceEvent,
     onApifonSendResult,
-    onApifonSendError
+    onApifonSendError,
+    prepareMessagingReport
 }

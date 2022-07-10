@@ -38,3 +38,7 @@ clients:
         success: "onApifonSendResult"
         fail: "onApifonSendError"
 
+internals:
+  sf-feedback:
+    input: "performSfFeedback"
+    call: "prepareMessagingReport"

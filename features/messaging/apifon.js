@@ -157,7 +157,10 @@ function onApifonSendResult(msg){
 
     msg.response.headers = {};
     msg.response.headers['content-type'] = 'application/json';
-    msg.payload = JSON.stringify(msg.payload);
+    //msg.payload = JSON.stringify(msg.payload);
+
+    msg.performSfFeedback = JSON.stringify(msg.payload);
+    delete msg.payload;
 
     return msg;
 }
@@ -169,8 +172,16 @@ function onApifonSendError(msg){
 }
 
 
+function prepareMessagingReport(msg){
+
+    log.info("hey hey hey from internals!");
+
+    return msg;
+}
+
 module.exports = {
     receiveSalesForceEvent,
     onApifonSendResult,
-    onApifonSendError
+    onApifonSendError,
+    prepareMessagingReport
 }
